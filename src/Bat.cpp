@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Util.h"
 
-//test
+//here
 
 Bat::Bat() :m_maxspeed(10.0f)
 {
