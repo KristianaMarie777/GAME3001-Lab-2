@@ -2,6 +2,9 @@
 #include "Game.h"
 #include "EventManager.h"
 
+#include <cstdlib>
+#include <ctime>
+
 // required for IMGUI
 #include "imgui.h"
 #include "imgui_sdl.h"
@@ -31,7 +34,10 @@ void PlayScene::update()
 {
 	updateDisplayList();
 
+	m_pObstacle->getRigidBody()->isColliding = false;
+
 	CollisionManager::AABBCheck(m_pBat, m_pObstacle);
+
 }
 
 void PlayScene::clean()
@@ -50,27 +56,92 @@ void PlayScene::handleEvents()
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
-		TheGame::Instance()->changeSceneState(START_SCENE);
+		m_pTarget->setEnabled(true);
+		m_pBat->setEnabled(true);
+		m_pObstacle->setEnabled(false);
+		m_pTarget->getTransform()->position.y = rand() % 601;
+		m_pTarget->getTransform()->position.x = rand() % 801;
+		m_pBat->setDestination(m_pTarget->getTransform()->position);
 	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_4))
+	{
+		m_pTarget->setEnabled(true);
+		m_pBat->setEnabled(true);
+		m_pObstacle->setEnabled(true);
+		m_pTarget->getTransform()->position.y = rand() % 601;
+		m_pTarget->getTransform()->position.x = rand() % 801;
+		m_pBat->setDestination(m_pTarget->getTransform()->position);
 
+	}
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_2))
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
+	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && m_pTarget->getTransform()->position.y > 0)
+	{
+		m_pTarget->getTransform()->position.y -= 6.0f;
+		m_pBat->setDestination(m_pTarget->getTransform()->position);
+	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S) && m_pTarget->getTransform()->position.y < 600)
+	{
+		m_pTarget->getTransform()->position.y += 6.0f;
+		m_pBat->setDestination(m_pTarget->getTransform()->position);
+	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && m_pTarget->getTransform()->position.x > 0)
+	{
+		m_pTarget->getTransform()->position.x -= 6.0f;
+		m_pBat->setDestination(m_pTarget->getTransform()->position);
+	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && m_pTarget->getTransform()->position.x < 800)
+	{
+		m_pTarget->getTransform()->position.x += 6.0f;
+		m_pBat->setDestination(m_pTarget->getTransform()->position);
 	}
 }
 
 void PlayScene::start()
 {
 
+	const SDL_Color black = { 0, 0, 0, 255 };
+	srand(time(NULL));
+
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
+
+	m_pInstructionLabel = new Label("Press 1 for Seeking", "Consolas", 20, black, glm::vec2(400.0f, 40.0f));;
+	m_pInstructionLabel->setParent(this);
+	addChild(m_pInstructionLabel);
+
+	m_pInstructionLabel = new Label("Press 2 for Fleeing", "Consolas", 20, black, glm::vec2(400.0f, 70.0f));;
+	m_pInstructionLabel->setParent(this);
+	addChild(m_pInstructionLabel);
+
+	m_pInstructionLabel = new Label("Press 3 for Arrival", "Consolas", 20, black, glm::vec2(400.0f, 100.0f));;
+	m_pInstructionLabel->setParent(this);
+	addChild(m_pInstructionLabel);
+
+	m_pInstructionLabel = new Label("Press 4 for Avoidance", "Consolas", 20, black, glm::vec2(400.0f, 130.0f));;
+	m_pInstructionLabel->setParent(this);
+	addChild(m_pInstructionLabel);
+
+	m_pInstructionLabel = new Label("Use WASD", "Consolas", 20, black, glm::vec2(100.0f, 40.0f));;
+	m_pInstructionLabel->setParent(this);
+	addChild(m_pInstructionLabel);
+
+	m_pInstructionLabel = new Label("to move Target", "Consolas", 20, black, glm::vec2(100.0f, 70.0f));;
+	m_pInstructionLabel->setParent(this);
+	addChild(m_pInstructionLabel);
+
+
 	m_pTarget = new Target();
 	m_pTarget->getTransform()->position = glm::vec2(500.0f, 300.0f);
+	m_pTarget->setEnabled(false);
 	addChild(m_pTarget);
 
 	m_pObstacle = new Obstacle();
 	m_pObstacle->getTransform()->position = glm::vec2(300.0f, 300.0f);
+	m_pObstacle->setEnabled(false);
 	addChild(m_pObstacle);
 
 	//declare bat properties OR instagating bat

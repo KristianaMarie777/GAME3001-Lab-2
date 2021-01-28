@@ -147,7 +147,7 @@ void Bat::m_Move()
 
 	
 	getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
-
+	
 	//using formula pf = pi + vi*t+0.5ai*t^2
 	getRigidBody()->velocity += getOrientation() * (deltaTime) + 
 		0.5f * getRigidBody()->acceleration * (deltaTime);

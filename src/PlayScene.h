@@ -27,14 +27,14 @@ private:
 	// IMGUI Function
 	void GUI_Function() const;
 	std::string m_guiTitle;
-	
+
 	glm::vec2 m_mousePosition;
 
 	Bat* m_pBat;
 	Target* m_pTarget;
 	Obstacle* m_pObstacle;
 
-
+	Label* m_pInstructionLabel;
 };
 
 #endif /* defined (__PLAY_SCENE__) */
