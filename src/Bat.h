@@ -19,8 +19,7 @@ public:
 	void clean() override;
 
 	// getters and setters
-	void setAvoidDestination(const glm::vec2 destination);
-
+	
 	void setDestination(const glm::vec2 destination);
 	void setMaxSpeed(float speed);
 	glm::vec2 getOrientation() const;
@@ -32,14 +31,9 @@ public:
 	float getAccelerationRate() const;
 	void setAccelerationRate(float rate);
 
-	void Fleeing(bool a);
 	void Seeking(bool a);
 
-	void Collisions();
-
 private:
-
-	glm::vec2 m_avoidDestination;
 
 	glm::vec2 m_destination;
 	glm::vec2 m_targetDirection;
@@ -50,12 +44,10 @@ private:
 	float m_turnRate;
 	float m_accelerationRate;
 
-	bool fleeing = false;
 	bool seeking = false;
 
 	//private function
-	void m_FMove();
-	void m_SMove();
+	void m_Move();
 	
 };
 

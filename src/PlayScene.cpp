@@ -40,13 +40,18 @@ void PlayScene::update()
 		m_pBat2->setDestination(m_pBat->getTransform()->position);
 	}
 
-	CollisionManager::AABBCheck(m_pBat, m_pObstacle);
-	if (CollisionManager::lineRectCheck(m_pBat->getTransform()->position,m_pTarget->getTransform()->position, m_pObstacle->getTransform()->position, m_pObstacle->getWidth(), m_pObstacle->getHeight()))
+	
+	if (m_pObstacle->isEnabled())
 	{
-		m_pBat->Fleeing(true);
+		CollisionManager::AABBCheck(m_pBat, m_pObstacle);
+
+		if (CollisionManager::lineRectCheck(m_pBat->getTransform()->position, m_pTarget->getTransform()->position, m_pObstacle->getTransform()->position, m_pObstacle->getWidth(), m_pObstacle->getHeight()))
+		{
+			m_pBat->Seeking(false);
+		}
+		else
+			m_pBat->Seeking(true);
 	}
-	else
-		m_pBat->Fleeing(false);
 }
 
 void PlayScene::clean()
@@ -73,7 +78,6 @@ void PlayScene::handleEvents()
 		m_pTarget->getTransform()->position.x = rand() % 801;
 
 		m_pBat->Seeking(true);
-		m_pBat->Fleeing(false);
 		m_pBat->setDestination(m_pTarget->getTransform()->position);
 
 
@@ -102,9 +106,7 @@ void PlayScene::handleEvents()
 
 		m_pBat->getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 		m_pBat->setRotation(0.0f);
-		m_pBat->Fleeing(true);
 		m_pBat->Seeking(false);
-		m_pBat->setAvoidDestination(m_pTarget->getTransform()->position);
 
 	}
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
@@ -112,12 +114,11 @@ void PlayScene::handleEvents()
 		m_pTarget->setEnabled(true);
 		m_pBat->setEnabled(true);
 		m_pBat2->setEnabled(true);
-		m_pObstacle->setEnabled(true);
+		m_pObstacle->setEnabled(false);
 		m_pTarget->getTransform()->position.y = rand() % 601;
 		m_pTarget->getTransform()->position.x = rand() % 801;
 		m_pBat->Seeking(true);
 		m_pBat2->Seeking(true);
-		m_pBat->Fleeing(false);
 		m_pBat->setDestination(m_pTarget->getTransform()->position);
 		m_pBat2->setDestination(m_pBat->getTransform()->position);
 
@@ -131,8 +132,6 @@ void PlayScene::handleEvents()
 		m_pTarget->getTransform()->position.y = rand() % 601;
 		m_pTarget->getTransform()->position.x = rand() % 801;
 		m_pBat->Seeking(true);
-		m_pBat->Fleeing(false);
-		m_pBat->setAvoidDestination(m_pObstacle->getTransform()->position);
 		m_pBat->setDestination(m_pTarget->getTransform()->position);
 
 	}

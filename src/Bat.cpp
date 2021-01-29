@@ -44,20 +44,11 @@ void Bat::draw()
 void Bat::update()
 {
 
-
-	if (seeking)
-		m_SMove();
-	if (fleeing)
-		m_FMove();
+	m_Move();
 }
 
 void Bat::clean()
 {
-}
-
-void Bat::setAvoidDestination(const glm::vec2 destination)
-{
-	m_avoidDestination = destination;
 }
 
 void Bat::setDestination(const glm::vec2 destination)
@@ -96,11 +87,6 @@ void Bat::setAccelerationRate(const float rate)
 	m_accelerationRate = rate;
 }
 
-void Bat::Fleeing(bool a)
-{
-	fleeing = a;
-}
-
 void Bat::Seeking(bool a)
 {
 	seeking = a;
@@ -136,55 +122,16 @@ float Bat::getRotation() const
 	return m_rotationAngle;
 }
 
-void Bat::m_SMove()
-{
-
-	auto deltaTime = TheGame::Instance()->getDeltaTime();
-	
-	//magnitude
-	m_targetDirection = m_destination - getTransform()->position;
-
-	//normalize direction
-	m_targetDirection = Util::normalize(m_targetDirection);
-
-	auto target_rotation = Util::signedAngle(getOrientation(), m_targetDirection);
-
-	auto turn_sensitivity = 5.0f;
-
-	if(abs(target_rotation) > turn_sensitivity)
-	{
-		//check this V
-		if (target_rotation > 0.0f)
-		{
-			setRotation(getRotation() + getTurnRate());
-		}
-		else if (target_rotation < 0.0f)
-		{
-			setRotation(getRotation() - getTurnRate());
-		}
-		
-	}
-
-
-	
-	getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
-	
-	//using formula pf = pi + vi*t+0.5ai*t^2
-	getRigidBody()->velocity += getOrientation() * (deltaTime) + 
-		0.5f * getRigidBody()->acceleration * (deltaTime);
-
-	getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxspeed);
-	
-	getTransform()->position += getRigidBody()->velocity;
-}
-
-void Bat::m_FMove()
+void Bat::m_Move()
 {
 
 	auto deltaTime = TheGame::Instance()->getDeltaTime();
 
 	//magnitude
-	m_targetDirection = (m_avoidDestination - getTransform()->position)*-1.0f;
+	if (seeking)
+		m_targetDirection = m_destination - getTransform()->position;
+	else
+		m_targetDirection = m_destination - (getTransform()->position * -1.0f);
 
 	//normalize direction
 	m_targetDirection = Util::normalize(m_targetDirection);
