@@ -77,64 +77,8 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 				break;
 			case OBSTACLE:
 				std::cout << "Collision with Obstacle!" << std::endl;
-				//SoundManager::Instance().playSound("yay", 0);
-
-				if ((object1->getTransform()->position.y + object1->getHeight() - object1->getRigidBody()->velocity.y >= object2->getTransform()->position.y &&((object1->getTransform()->position.y + object1->getHeight() - object1->getRigidBody()->velocity.y) <= object2->getTransform()->position.y)))
-				{
-
-					if ((object1->getTransform()->position.y + object1->getHeight() - object1->getRigidBody()->velocity.y) <= object2->getTransform()->position.y)
-					{
-						std::cout << "stop" << std::endl;
-						object1->getRigidBody()->velocity.y = 0.0f;
-						object1->getTransform()->position.y = object2->getTransform()->position.y - object1->getHeight();
-					}
-					else if ((object1->getTransform()->position.y - object1->getRigidBody()->velocity.y) >= (object2->getTransform()->position.y + object2->getHeight()))
-					{
-						std::cout << "stop else" << std::endl;
-						object1->getRigidBody()->velocity.y = 0.0f;
-						object1->getTransform()->position.y = object2->getTransform()->position.y + object2->getHeight();
-					}
-					else if ((object1->getTransform()->position.x + object1->getWidth() - object1->getRigidBody()->velocity.x) <= object2->getTransform()->position.x)
-					{
-						std::cout << "stopx" << std::endl;
-						object1->getRigidBody()->velocity.x = 0.0f;
-						object1->getTransform()->position.x = object2->getTransform()->position.x - object1->getWidth();
-					}
-					else if ((object1->getTransform()->position.x - object1->getRigidBody()->velocity.x) >= (object2->getTransform()->position.x + object2->getWidth()))
-					{
-						std::cout << "stopx else" << std::endl;
-						object1->getRigidBody()->velocity.x = 0.0f;
-						object1->getTransform()->position.x = object2->getTransform()->position.x + object2->getWidth();
-					}
-
-				}
-				else
-				{
-					if ((object1->getTransform()->position.y + object1->getHeight() - object1->getRigidBody()->velocity.y) <= object2->getTransform()->position.y)
-					{
-						std::cout << "stop" << std::endl;
-						object1->getRigidBody()->velocity.y = 0.0f;
-						object1->getTransform()->position.y = object2->getTransform()->position.y - object1->getHeight();
-					}
-					else if ((object1->getTransform()->position.y - object1->getRigidBody()->velocity.y) >= (object2->getTransform()->position.y + object2->getHeight()))
-					{
-						std::cout << "stop else" << std::endl;
-						object1->getRigidBody()->velocity.y = 0.0f;
-						object1->getTransform()->position.y = object2->getTransform()->position.y + object2->getHeight();
-					}
-					else if ((object1->getTransform()->position.x + object1->getWidth() - object1->getRigidBody()->velocity.x) <= object2->getTransform()->position.x)
-					{
-						std::cout << "stopx" << std::endl;
-						object1->getRigidBody()->velocity.x = 0.0f;
-						object1->getTransform()->position.x = object2->getTransform()->position.x - object1->getWidth();
-					}
-					else if ((object1->getTransform()->position.x - object1->getRigidBody()->velocity.x) >= (object2->getTransform()->position.x + object2->getWidth()))
-					{
-						std::cout << "stopx else" << std::endl;
-						object1->getRigidBody()->velocity.x = 0.0f;
-						object1->getTransform()->position.x = object2->getTransform()->position.x + object2->getWidth();
-					}
-				}
+				SoundManager::Instance().playSound("yay", 0);
+				
 				//sound
 
 				break;
@@ -202,6 +146,8 @@ bool CollisionManager::lineRectCheck(const glm::vec2 line1_start, const glm::vec
 	// if ANY of the above are true, the line
 	// has hit the rectangle
 	if (left || right || top || bottom) {
+
+		std::cout << "here";
 		return true;
 	}
 

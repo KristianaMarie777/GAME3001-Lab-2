@@ -31,6 +31,7 @@ private:
 	glm::vec2 m_mousePosition;
 
 	Bat* m_pBat;
+	Bat* m_pBat2;
 	Target* m_pTarget;
 	Obstacle* m_pObstacle;
 
